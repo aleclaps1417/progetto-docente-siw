@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inserisci Nuovo Giocatore</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Aggiungi un Nuovo Giocatore</h1>
+        
+        <form th:action="@{/admin/giocatore}" method="POST" th:object="${giocatore}" class="form-admin">
+            
+            <div class="form-group">
+                <label>Nome:</label>
+                <input type="text" th:field="*{nome}" required class="form-control"/>
+                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color:red;"></span>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Cognome:</label>
+                <input type="text" th:field="*{cognome}" required class="form-control" />
+                <span th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}" style="color:red;"></span>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Data di Nascita:</label>
+                <input type="date" th:field="*{dataDiNascita}" class="form-control" />
+				<span th:if="${#fields.hasErrors('dataDiNascita')}" th:errors="*{dataDiNascita}" style="color: red;"></span>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Ruolo:</label>
+                <input type="text" th:field="*{ruolo}" class="form-control" />
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Altezza (cm):</label>
+                <input type="number" th:field="*{altezza}"  class="form-control"/>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Squadra di appartenenza:</label>
+				<select th:field="*{squadra}" class="form-control">
+				        <option value="">-- Nessuna / Svincolato --</option>
+				        <option th:each="sq : ${squadre}" 
+				       			th:value="${sq.id}" 
+				                th:text="${sq.nome}"></option>
+				 </select>
+            </div>
+            <br/>
+			<div class="form-actions">
+				<button type="submit" class="btn-primary">Salva Giocatore</button>
+				<a th:href="@{/admin/giocatori}" class="btn btn-secondary">&larr; Annulla e torna alla Gestione Giocatori</a>
+			</div>
+            
+        </form>
+        
+        <br/>
+        
+    </div>
+</body>
+</html>

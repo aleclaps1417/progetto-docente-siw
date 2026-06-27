@@ -1,0 +1,41 @@
+# ========== Backend Spring Boot ==========
+**/target/
+**/*.class
+**/.metadata/
+**/.settings/
+**/.project
+**/.classpath
+**/.factorypath
+**/bin/
+
+# Spring Boot
+**/HELP.md
+
+# ========== Frontend React/Node ==========
+**/node_modules/
+**/dist/
+**/build/
+**/.env
+**/.env.local
+**/.env.production
+
+# Vite
+**/.vite/
+
+# ========== IDE ==========
+**/.vscode/
+**/.idea/
+**/*.iml
+
+# ========== Sistema operativo ==========
+**/.DS_Store
+**/Thumbs.db
+**/desktop.ini
+
+# ========== Logs ==========
+**/*.log
+**/logs/
+
+# ========== Database locale ==========
+**/*.db
+**/h2-data/

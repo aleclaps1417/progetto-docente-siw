@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title>Dettaglio Partita</title>
+	<meta charset="UTF-8">
+	<!-- Meta Viewport per cellulari -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+	<!-- NAVBAR STANDARD -->
+	<div class="navbar">
+		<div>
+			<strong style="font-size: 1.2rem;">🏆 Gestione Tornei</strong>
+		</div>
+		<div>
+			<span th:if="${userDetails == null}">
+				<a th:href="@{/login}">Login</a>
+				<a th:href="@{/register}">Registrati</a>
+			</span>
+			<span th:if="${userDetails != null}">
+				<span class="navbar-user-info">Benvenuto, <strong th:text="${userDetails.username}"></strong>!</span>
+				<span th:if="${#lists.contains(userDetails.authorities.![authority], 'ADMIN')}">
+					<a th:href="@{/admin/dashboard}">Area Amministratore</a>
+				</span>
+				<form th:action="@{/logout}" method="post" style="display: inline;">
+					<button type="submit" class="logout-btn">Logout</button>
+				</form>
+			</span>
+		</div>
+	</div>
+	<!-- CONTENITORE PRINCIPALE-->
+	<div class="container" style="max-width: 800px;">
+
+		<!-- TABELLONE RISULTATO -->
+		<div class="scoreboard">
+			<h1 style="margin-top: 0; font-size: 1.5rem; color: #e9ecef;">Dettaglio Partita</h1>
+
+			<h2>
+				<span th:text="${partita.squadraCasa.nome}">Squadra 1</span>
+				<span th:text="${partita.goalsHome}">0</span>
+				-
+				<span th:text="${partita.goalsAway}">0</span>
+				<span th:text="${partita.squadraTrasferta.nome}">Squadra 2</span>
+			</h2>
+
+			<p style="margin-bottom: 0;">
+				📅 <span
+					th:text="${partita.dataEOra != null ? #temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm'):'Data da definire'}">10/06/2026
+					20:45</span> |
+				📍 <span th:text="${partita.luogo}">Stadio</span> |
+				🚦 <span th:text="${partita.status}">Stato</span>
+			</p>
+		</div>
+
+
+		<!-- SEZIONE COMMENTI -->
+		<div>
+			<h3 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">💬 Sezione Commenti</h3>
+
+			<!-- Form Inserimento Commento -->
+			<form style="margin-bottom: 30px;" th:action="@{/partita/{id}/commento(id=${partita.id})}" method="POST"
+				th:object="${nuovoCommento}">
+				<div>
+					<!-- Usiamo la classe .form-control creata prima -->
+					<textarea class="form-control" th:field="*{testo}" rows="3"
+						placeholder="Scrivi il tuo commento qui..." required></textarea>
+
+					<!-- Usiamo la classe .text-danger invece dello style="color:red;" -->
+					<span class="text-danger" th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}"></span>
+				</div>
+				<!-- Usiamo il bottone blu standard -->
+				<button class="btn" type="submit" style="border: none; cursor: pointer;">Pubblica Commento</button>
+			</form>
+
+			<!-- Lista dei commenti esistenti -->
+			<div th:if="${!#lists.isEmpty(partita.commentiPartita)}">
+
+				<!-- Riquadro per ogni singolo commento -->
+				<div class="comment-box" th:each="commento : ${partita.commentiPartita}">
+
+					<div style="display: flex; justify-content: space-between; align-items: center;">
+						<div>
+							<strong style="color: #007bff;">
+								<span th:text="${commento.autore.name} + ' ' + ${commento.autore.surname}">Nome
+									Cognome</span>
+							</strong>
+							<small style="color: #888;"
+								th:text="' - ' + ${#temporals.format(commento.dataCreazione, 'dd/MM/yyyy HH:mm')}">Data</small>
+						</div>
+
+						<!-- Tasto Modifica (piccolo e grigio) visibile solo all'autore -->
+						<a class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;"
+							th:if="${loggedUserId != null and loggedUserId == commento.autore.id}"
+							th:href="@{/commento/modifica/{id}(id=${commento.id})}">Modifica</a>
+					</div>
+
+					<!-- Testo del commento -->
+					<p th:text="${commento.testo}">Testo del commento</p>
+
+				</div>
+			</div>
+
+			<p th:if="${#lists.isEmpty(partita.commentiPartita)}" style="color: #666; font-style: italic;">
+				Non ci sono ancora commenti. Sii il primo a scriverne uno!
+			</p>
+
+		</div>
+
+		<!-- Pulsante Indietro -->
+		<div style="margin-top: 40px; text-align: center;">
+			<a class="btn btn-secondary" th:href="@{/tornei}">&larr; Torna alla lista Tornei</a>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

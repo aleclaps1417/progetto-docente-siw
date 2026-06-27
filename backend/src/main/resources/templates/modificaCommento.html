@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Modifica Commento</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+	<!-- NAVBAR STANDARD -->
+	<div class="navbar">
+		<div>
+			<strong style="font-size: 1.2rem;">🏆 Gestione Tornei</strong>
+		</div>
+		<div>
+			<span th:if="${userDetails == null}">
+				<a th:href="@{/login}">Login</a>
+				<a th:href="@{/register}">Registrati</a>
+			</span>
+			<span th:if="${userDetails != null}">
+				<span class="navbar-user-info">Benvenuto, <strong th:text="${userDetails.username}"></strong>!</span>
+				<span th:if="${#lists.contains(userDetails.authorities.![authority], 'ADMIN')}">
+					<a th:href="@{/admin/dashboard}">Area Amministratore</a>
+				</span>
+				<form th:action="@{/logout}" method="post" style="display: inline;">
+					<button type="submit" class="logout-btn">Logout</button>
+				</form>
+			</span>
+		</div>
+	</div>
+<div class="container">
+	
+
+	<h1>Modifica il tuo commento</h1>
+
+	<!-- Il form invia i dati alla rotta POST passando l'ID del commento -->
+	<form th:action="@{/commento/modifica/{id}(id=${commento.id})}" method="POST" th:object="${commento}" class="form-admin">
+
+		<div class="form-group">
+			<!-- th:field="*{testo}" riempirà automaticamente la textarea con il testo attuale -->
+			<textarea th:field="*{testo}" rows="4" cols="50" required class="form-control"></textarea>
+			<br />
+			<!-- Mostra eventuali errori di validazione (es. commento troppo lungo) -->
+			<span th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}" class="text-danger"></span>
+		</div>
+
+		<br />
+		<div class="form-actions">
+			<button type="submit" class="btn-primary">Salva Modifiche</button>
+			<!-- Link per annullare l'operazione e tornare indietro -->
+			<a th:href="@{/partita/{id}(id=${commento.partita.id})}" class="btn btn-secondary"> &larr;Annulla e torna alla partita</a>
+		</div>
+		
+	</form>
+
+	<br />
+	
+	</div>
+</body>
+
+</html>

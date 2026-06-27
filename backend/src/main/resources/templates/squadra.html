@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<!-- Meta Viewport FONDAMENTALE per i cellulari -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Dettaglio Squadra</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+
+	<!-- NAVBAR STANDARD -->
+	<div class="navbar">
+		<div>
+			<strong style="font-size: 1.2rem;">🏆 Gestione Tornei</strong>
+		</div>
+		<div>
+			<span th:if="${userDetails == null}">
+				<a th:href="@{/login}">Login</a>
+				<a th:href="@{/register}">Registrati</a>
+			</span>
+			<span th:if="${userDetails != null}">
+				<span class="navbar-user-info">Benvenuto, <strong th:text="${userDetails.username}"></strong>!</span>
+				<span th:if="${#lists.contains(userDetails.authorities.![authority], 'ADMIN')}">
+					<a th:href="@{/admin/dashboard}">Area Amministratore</a>
+				</span>
+				<form th:action="@{/logout}" method="post" style="display: inline;">
+					<button type="submit" class="logout-btn">Logout</button>
+				</form>
+			</span>
+		</div>
+	</div>
+
+	<!-- CONTENITORE PRINCIPALE CENTRATO -->
+	<div class="container">
+
+		<!-- Intestazione Squadra (Semplice) -->
+		<h1 style="color: #28a745;" th:text="${squadra.nome}">Nome Squadra</h1>
+		<p><strong>Città:</strong> <span th:text="${squadra.citta}">Città</span></p>
+		<p><strong>Anno di fondazione:</strong> <span th:text="${squadra.annoFondazione}">1900</span></p>
+
+		<hr style="border: 1px solid #ddd; margin: 20px 0;">
+
+		<!-- SEZIONE GIOCATORI (Lista Classica) -->
+		<div class="giocatori-list">
+			<h2>Rosa Giocatori (<span th:text="${#lists.size(squadra.giocatori)}">0</span>)</h2>
+
+			<p th:if="${squadra.giocatori.isEmpty()}" style="color: #666; font-style: italic;">
+				Nessun giocatore registrato in questa squadra.
+			</p>
+
+			<!-- Usa la nostra nuova classe lista-semplice -->
+			<ul th:if="${!squadra.giocatori.isEmpty()}" class="lista-semplice">
+				<li th:each="giocatore : ${squadra.giocatori}">
+					<strong th:text="${giocatore.nome} + ' ' + ${giocatore.cognome}">Nome Cognome</strong>
+					- Ruolo: <span th:text="${giocatore.ruolo}">Ruolo</span>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Pulsante Indietro -->
+		<div style="margin-top: 30px;">
+			<a th:href="@{/tornei}" class="btn btn-secondary">&larr; Torna all'elenco dei tornei</a>
+		</div>
+
+	</div>
+</body>
+
+</html>

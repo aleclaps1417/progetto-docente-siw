@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th"http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Modifica Torneo</title>
+		<link rel="stylesheet" th:href="@{/css/style.css}">
+	</head>
+	<body>
+		<div th:if="${successMessage}" th:text="${successMessage}" >
+		</div>
+
+		<div th:if="${errorMessage}" th:text="${errorMessage}">
+		    </div>
+	    <div class="container">
+	        <h1>Modifica Torneo</h1>
+	        
+	        <form th:action="@{/admin/torneo/edit/{id}(id=${torneo.id})}" method="POST" th:object="${torneo}" class="form-admin">
+	            
+	            <input type="hidden" th:field="*{id}" />
+	            
+	            <div class="form-group">
+	                <label>Nome Torneo:</label>
+	                <input type="text" th:field="*{nome}" required class="form-control" />
+	                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="text-danger"></span>
+	            </divclass="form-group">
+	            <br/>
+
+	            <div class="form-group">
+	                <label>Anno:</label>
+	                <input type="number" th:field="*{anno}" required class="form-control" />
+	                <span th:if="${#fields.hasErrors('anno')}" th:errors="*{anno}" class="text-danger"></span>
+	            </div>
+	            <br/>
+
+	            <div class="form-group">
+	                <label>Descrizione:</label><br/>
+	                <textarea th:field="*{descrizione}" rows="4" cols="40" class="form-control"></textarea>
+	                <span th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}" class="text-danger"></span>
+	            </div>
+	            <br/>
+				<div class="form-actions">
+					<button type="submit" class="btn-primary"> 💾 Aggiorna Torneo</button>
+				</div>
+	           
+	        </form>
+			
+			<h2> 🛡️ Squadre Partecipanti</h2>
+			<div>
+				<a th:href="@{/admin/torneo/{id}/squadre/add(id=${torneo.id})}" class="btn btn-success">+Aggiungi Squadre</a>
+			</div>
+			<br>
+			<div>
+				<a th:href="@{/admin/torneo/{t_id}/partita/new(t_id=${torneo.id})}" class="btn">📅 Programma Partita</a>
+			</div>
+			<ul class="lista-semplice" th:if="${torneo.squadre !=null and !torneo.squadre.isEmpty()}">
+				<li th:each="squadra: ${torneo.squadre}">
+					<strong th:text="${squadra.nome}">Nome Squadra</strong>
+					<form th:action="@{/admin/torneo/{t_id}/squadra/{s_id}/remove(t_id=${torneo.id}, s_id=${squadra.id})}"
+					      method="post"
+					      style="display: inline;"
+					      onsubmit="return confirm('Rimuovere questa squadra dal torneo?');">
+					    <button type="submit" class="btn-sm btn-danger">Rimuovi squadra dal Torneo</button>
+					</form>
+				</li>
+			</ul>
+	        <p th:if="${torneo.squadre==null or torneo.squadre.isEmpty()}">
+				<em>Nessuna squadra attualmente iscritta a questo torneo</em>
+				
+			</p>
+	        <br/>
+			<div class="partite-list">
+						<h2>Calendario Partite</h2>
+						<p th:if="${torneo.partite == null or torneo.partite.isEmpty()}">Il calendario non è ancora stato generato.</p>
+
+						<table class="custom-table" th:if="${torneo.partite != null and !torneo.partite.isEmpty()}" style="width: 100%; text-align: left; border-collapse: collapse;">
+						            <thead>
+						                <tr>
+						                    <th>Data e Ora</th>
+						                    <th>Luogo</th>
+						                    <th>Partita</th>
+						                    <th style="text-align: center;">Risultato</th>
+											<th style="text-align: center;"></th>
+						                </tr>
+						            </thead>
+						            <tbody>
+						                <tr th:each="partita : ${torneo.partite}" >
+						                    
+						                    <td  th:text="${#temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm')}">10/06/2026 20:45</td>
+						                    
+						                    <td th:text="${partita.luogo}">Stadio</td>
+
+						                    <td >
+												
+						                        <strong th:text="${partita.squadraCasa.nome}">Casa</strong> 
+						                        vs 
+						                        <strong th:text="${partita.squadraTrasferta.nome}">Trasferta</strong>
+												
+						                    </td>
+						                    
+						                    <td style=" text-align: center; font-weight: bold;">
+						                        
+						                        <span th:if="${partita.status.name() == 'PLAYED'}" 
+						                              th:text="${partita.goalsHome} + ' - ' + ${partita.goalsAway}" style="color: #28a745;">2 - 1</span>
+						                        
+						                        <span th:if="${partita.status.name() != 'PLAYED'}" style="color: gray; font-style: italic;">Da giocare</span>
+						                        
+						                    </td>
+											<td style=" text-align: center;">
+											    <!-- Il link per eliminare la partita. Passiamo l'id della singola partita -->
+												<form th:action="@{/admin/partita/delete/{id}(id=${partita.id})}"
+												      method="post"
+												      style="display: inline;"
+												      onsubmit="return confirm('Eliminare questa partita?');">
+												    <button type="submit" class="btn-sm btn-danger">🗑️ Elimina</button>
+												</form>
+											
+											
+												<a th:href="@{/admin/partita/edit/{id}(id=${partita.id})}" class="btn-sm btn-warning">✏️ Risultato</a>
+											</td>
+												
+						                </tr>
+						            </tbody>
+						        </table>		
+					   </div>
+	        <a th:href="@{/admin/tornei}" class="btn btn-secondary">&larr; Torna alla Gestione Tornei</a>
+	    </div>
+	</body>
+	
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Gestione Tornei</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<!-- ==========================================
+	         INIZIO NAVBAR (Il blocco magico di prima)
+	         ========================================== -->
+	<div class="navbar">
+
+		<!-- Zona Sinistra: Titolo o Logo (Opzionale) -->
+		<div>
+			<strong style="font-size: 1.2rem;">🏆 Gestione Tornei</strong>
+		</div>
+		<!-- Zona Destra: Link e Login -->
+		<div>
+			<!-- Se l'utente NON è loggato -->
+			<span th:if="${userDetails == null}">
+				<a th:href="@{/login}">Login</a> |
+				<a th:href="@{/register}">Registrati</a>
+			</span>
+
+			<!-- Se l'utente È loggato -->
+			<span th:if="${userDetails != null}">
+				<span>Benvenuto, <strong th:text="${userDetails.username}"></strong>!</span>
+
+				<!-- Mostra questo link SOLO se ha il ruolo ADMIN -->
+				<span th:if="${#lists.contains(userDetails.authorities.![authority], 'ADMIN')}">
+					| <a th:href="@{/admin/dashboard}">Area Amministratore</a>
+				</span>
+
+				| <form th:action="@{/logout}" method="post" style="display: inline;">
+					<button type="submit" class="logout-btn">Logout</button>
+				</form>
+			</span>
+
+		</div>
+
+
+	</div>
+	<!-- ==========================================
+	         FINE NAVBAR
+	         ========================================== -->
+
+	<div class="container">
+		<h1>Gestione Tornei</h1>
+
+		<div style="margin-bottom: 20px;">
+			<a th:href="@{/admin/torneo/new}" class="btn btn-success">+ Aggiungi una nuovo torneo</a>
+		</div>
+
+		<hr>
+
+		<ul class="lista-semplice" th:if="${!tornei.isEmpty()}">
+			<li th:each="torneo : ${tornei}" style="margin-bottom: 15px;">
+				<strong th:text="${torneo.nome}">Nome Torneo</strong>
+				-Anno:<span th:text="${torneo.anno}">2024</span>
+				<p style="margin-top: 5px; font-style: italic; color: gray;" th:text="${torneo.descrizione}">
+					Descrizione del torneo...
+				</p>
+				
+					<a th:href="@{/admin/torneo/edit/{id}(id=${torneo.id})}"
+						class="btn-sm btn-warning">✏️ Modifica Dati</a>
+				
+			</li>
+
+
+		</ul>
+		<p th:if="${tornei.isEmpty()}">Nessun torneo presente nel sistema.</p>
+		<br>
+		<a th:href="@{/admin/dashboard}" class="btn btn-secondary">&larr; Torna alla Dashboard</a>
+	</div>
+</body>
+
+</html>

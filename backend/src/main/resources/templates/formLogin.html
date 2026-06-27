@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - Gestione Tornei</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+	<div class="container">
+		
+	
+    <h1>Accedi al sistema</h1>
+
+    <!-- Questo div compare automaticamente se Spring ci rimanda qui con un errore (es. password sbagliata) -->
+    <div th:if="${param.error}" class="text-danger">
+        Credenziali errate. Riprova.
+    </div>
+
+    <form th:action="@{/login}" method="POST" class="form-admin">
+        <div>
+            <label>Username:</label>
+            <input type="text" name="username" required class="form-control"/>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password" required class="form-control"/>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Login</button>
+        </div>
+    </form>
+    
+    <p>Non hai un account? <a th:href="@{/register}">Registrati qui</a></p>
+    <p><a th:href="@{/}">Torna alla Home</a></p>
+	</div>
+</body>
+</html>

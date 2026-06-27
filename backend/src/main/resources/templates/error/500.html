@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>500 - Errore Interno</title>
+</head>
+<body style="text-align: center; padding: 50px; font-family: sans-serif; color: #333;">
+    <h1 style="color: red;">Errore 500</h1>
+    <h2>Qualcosa è andato storto nei nostri server!</h2>
+    <!-- Stampiamo il messaggio che abbiamo passato dal GlobalExceptionHandler -->
+    <p th:text="${errorMessage}">Errore imprevisto.</p>
+    <br/>
+    <a th:href="@{/}">Torna alla Home in sicurezza</a>
+</body>
+</html>

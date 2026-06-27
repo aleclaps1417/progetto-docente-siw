@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Gestione Squadre</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<!-- ==========================================
+	         INIZIO NAVBAR (Il blocco magico di prima)
+	         ========================================== -->
+	<div class="navbar">
+
+		<!-- Zona Sinistra: Titolo o Logo (Opzionale) -->
+		<div>
+			<strong style="font-size: 1.2rem;">🏆 Gestione Tornei</strong>
+		</div>
+		<!-- Zona Destra: Link e Login -->
+		<div>
+			<!-- Se l'utente NON è loggato -->
+			<span th:if="${userDetails == null}">
+				<a th:href="@{/login}">Login</a> |
+				<a th:href="@{/register}">Registrati</a>
+			</span>
+
+			<!-- Se l'utente È loggato -->
+			<span th:if="${userDetails != null}">
+				<span>Benvenuto, <strong th:text="${userDetails.username}"></strong>!</span>
+
+				<!-- Mostra questo link SOLO se ha il ruolo ADMIN -->
+				<span th:if="${#lists.contains(userDetails.authorities.![authority], 'ADMIN')}">
+					| <a th:href="@{/admin/dashboard}">Area Amministratore</a>
+				</span>
+
+				| <form th:action="@{/logout}" method="post" style="display: inline;">
+					<button type="submit" class="logout-btn">Logout</button>
+				</form>
+			</span>
+
+		</div>
+
+
+	</div>
+	<!-- ==========================================
+	         FINE NAVBAR
+	         ========================================== -->
+
+	<div class="container">
+		<h1>Gestione Squadre</h1>
+
+		<!-- Link per inserire una nuova squadra (punta alla rotta che abbiamo fatto prima) -->
+		<div style="margin-bottom: 20px;">
+			<a th:href="@{/admin/squadra/new}" class="btn btn-success">+ Aggiungi una nuova Squadra</a>
+		</div>
+		<div th:if="${errorMessage}" th:text="${errorMessage}"></div>
+		<div th:if="${successMessage}" th:text="${successMessage}"></div>
+		<hr>
+
+		<p><i>Clicca sul nome di una squadra per modificarne i dati:</i></p>
+
+		<!-- Lista di tutte le squadre -->
+		<ul class="lista-semplice" th:if="${!squadre.isEmpty()}">
+			<li th:each="squadra : ${squadre}" style="margin-bottom: 10px;">
+				<!-- Questo link porterà alla futura pagina di modifica -->
+				<a th:href="@{/admin/squadra/edit/{id}(id=${squadra.id})}" th:text="${squadra.nome}"
+					class="item-link">Nome Squadra</a>
+				- Fondata nel <span th:text="${squadra.annoFondazione}">1900</span> a <span
+					th:text="${squadra.citta}">Città</span>
+					<form th:action="@{/admin/squadra/delete/{id}(id=${squadra.id})}" method="post"
+					                  style="display: inline;"
+					                  onsubmit="return confirm('Sei sicuro di voler eliminare questa squadra?');">
+					                <button type="submit" class="btn-sm btn-danger">Elimina</button>
+					            </form>
+			</li>
+		</ul>
+
+		<p th:if="${squadre.isEmpty()}">Nessuna squadra presente nel sistema.</p>
+
+		<br>
+		<a th:href="@{/admin/dashboard}" class="btn btn-secondary">&larr; Torna alla Dashboard</a>
+	</div>
+</body>
+
+</html>

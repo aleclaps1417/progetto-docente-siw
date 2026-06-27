@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuova Partita</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Aggiungi Partita al Torneo: <span th:text="${torneo.nome}">Nome</span></h1>
+        
+        <form th:action="@{/admin/torneo/{t_id}/partita/new(t_id=${torneo.id})}" method="POST" th:object="${partita}" class="form-admin">
+            
+            <div class="form-group">
+                <label>Data e Ora:</label>
+                <input type="datetime-local" th:field="*{dataEOra}" required class="form-control"/>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Luogo (Stadio):</label>
+                <input type="text" th:field="*{luogo}" class="form-control"/>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Squadra in Casa:</label>
+                <select th:field="*{squadraCasa}" required class="form-control">
+                    <option value="">-- Seleziona --</option>
+                    <option th:each="sq : ${squadreTorneo}" 
+                            th:value="${sq.id}" 
+                            th:text="${sq.nome}"></option>
+                </select>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Squadra in Trasferta:</label>
+                <select th:field="*{squadraTrasferta}" required class="form-control">
+                    <option value="">-- Seleziona --</option>
+                    <option th:each="sq : ${squadreTorneo}" 
+                            th:value="${sq.id}" 
+                            th:text="${sq.nome}"></option>
+                </select>
+				<span th:if="${#fields.hasErrors('squadraTrasferta')}" th:errors="*{squadraTrasferta}" class="text-danger"></span>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>Stato Partita:</label>
+                <select th:field="*{status}" class="form-control">
+                    <option th:each="stato : ${statiPartita}" 
+                            th:value="${stato}" 
+                            th:text="${stato}"></option>
+                </select>
+            </div>
+            <br/>
+			<div class="form-actions">
+            <button type="submit" class="btn-primary">Salva Partita</button>
+			<a th:href="@{/admin/torneo/edit/{id}(id=${torneo.id})}" class="btn btn-secondary">&larr; Annulla</a>
+			</div>
+        </form>
+        
+        <br/>
+        
+    </div>
+</body>
+</html>

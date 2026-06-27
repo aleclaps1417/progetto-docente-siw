@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Risorsa Non Trovata - 404</title>
+</head>
+<body style="text-align: center; padding: 50px; font-family: Arial, sans-serif; background-color: #f8f9fa;">
+
+    <div style="max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        
+        <!-- Titolo dell'errore -->
+        <h1 style="color: #dc3545; font-size: 60px; margin-bottom: 10px;">404</h1>
+        <h2 style="color: #333;">Oops! Qualcosa è andato storto.</h2>
+        
+      
+        <p th:text="${errorMessage}" style="font-size: 18px; color: #666; margin-top: 20px;">
+            La pagina o la risorsa che stai cercando non esiste.
+        </p>
+        
+        <br/>
+        
+        <!-- Tasti per la navigazione -->
+        <div style="margin-top: 30px;">
+            
+            
+            
+            
+            <a th:href="@{/}" style="display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 5px;">
+                Torna alla Home
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Inserisci Nuova Squadra</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Aggiungi una Nuova Squadra</h1>
+
+		<!-- Il form punta alla rotta POST /admin/squadra -->
+		<form th:action="@{/admin/squadra}" method="POST" th:object="${squadra}" class="form-admin" >
+
+			<div class="form-group">
+				<label>Nome Squadra:</label>
+				<!-- th:field collega in automatico l'input all'attributo "nome" -->
+				<input type="text" th:field="*{nome}" required class="form-control" />
+				<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="text-danger"></span>
+			</div>
+			<br />
+
+			<div class="form-group">
+				<label>Città:</label>
+				<input type="text" th:field="*{citta}" required class="form-control" />
+				<span th:if="${#fields.hasErrors('citta')}" th:errors="*{citta}" class="text-danger"></span>
+			</div>
+			<br />
+
+			<div class="form-group">
+				<label>Anno di Fondazione:</label>
+				<input type="number" th:field="*{annoFondazione}" class="form-control" />
+				<span th:if="${#fields.hasErrors('annoFondazione')}" th:errors="*{annoFondazione}"
+					class="text-danger"></span>
+			</div>
+			<br />
+			<div class="form-actions">
+				<button type="submit" class="btn-primary">Salva Squadra</button>
+				<a th:href="@{/admin/dashboard}" class="btn btn-secondary">&larr; Torna alla Dashboard</a>
+			</div>
+
+		</form>
+
+		<br />
+
+	</div>
+</body>
+
+</html>

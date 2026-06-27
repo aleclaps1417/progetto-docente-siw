@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<!-- Meta Viewport per i dispositivi mobili[cite: 2] -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Dettaglio Torneo</title>
+
+	<!-- Link al nostro foglio di stile esterno[cite: 2] -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+
+	<!-- NAVBAR STANDARD -->
+	<div class="navbar">
+		<div>
+			<strong style="font-size: 1.2rem;">🏆 Gestione Tornei</strong>
+		</div>
+		<div>
+			<span th:if="${userDetails == null}">
+				<a th:href="@{/login}">Login</a>
+				<a th:href="@{/register}">Registrati</a>
+			</span>
+			<span th:if="${userDetails != null}">
+				<span class="navbar-user-info">Benvenuto, <strong th:text="${userDetails.username}"></strong>!</span>
+				<span th:if="${#lists.contains(userDetails.authorities.![authority], 'ADMIN')}">
+					<a th:href="@{/admin/dashboard}">Area Amministratore</a>
+				</span>
+				<form th:action="@{/logout}" method="post" style="display: inline;">
+					<button type="submit" class="logout-btn">Logout</button>
+				</form>
+			</span>
+		</div>
+	</div>
+
+	<!-- CONTENITORE PRINCIPALE CENTRATO -->
+	<div class="container">
+
+		<!-- Intestazione Torneo -->
+		<div style="text-align: center; margin-bottom: 40px;">
+			<h1 style="color: #e67e22;" th:text="'🏆 ' + ${torneo.nome}">Nome Torneo</h1>
+			<p style="font-size: 1.2rem;"><strong>Anno:</strong> <span th:text="${torneo.anno}">2000</span></p>
+			<p style="color: #555;"><em><span th:text="${torneo.descrizione}">Nessuna descrizione</span></em></p>
+		</div>
+
+		<!-- SEZIONE A DUE COLONNE CON FLEXBOX -->
+		<div class="row">
+
+			<!-- Colonna Sinistra: Classifica -->
+			<div class="col">
+				<h2 style="color: #28a745;">📈 Classifica Attuale</h2>
+
+				<p th:if="${classifica == null or classifica.isEmpty()}">Nessuna classifica disponibile al momento.</p>
+
+				<table class="custom-table table-classifica" th:if="${classifica != null and !classifica.isEmpty()}">
+					<thead>
+						<tr>
+							<th>Pos.</th>
+							<th>Squadra</th>
+							<th style="text-align: center;">Punti</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="riga, iterStat : ${classifica}">
+							<td style="font-weight: bold;" th:text="${iterStat.count} + '°'">1°</td>
+							<td>
+								<a th:href="@{'/squadra/' + ${riga.squadra.id}}" th:text="${riga.squadra.nome}"
+									style="text-decoration: none; color: #333; font-weight: bold;">Nome Squadra</a>
+							</td>
+							<td style="text-align: center; font-weight: bold; font-size: 1.2em;"
+								th:text="${riga.punti}">0</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Colonna Destra: Squadre Iscritte -->
+			<div class="col">
+				<h2 style="color: #007bff;">🛡️ Squadre Iscritte (<span
+						th:text="${#lists.size(torneo.squadre)}">0</span>)</h2>
+
+				<p th:if="${torneo.squadre.isEmpty()}">Nessuna squadra ancora iscritta.</p>
+
+				<ul class="link-list" th:if="${!torneo.squadre.isEmpty()}">
+					<li th:each="squadra : ${torneo.squadre}"
+						style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #ddd;">
+						<strong>
+							<a th:href="@{'/squadra/' + ${squadra.id}}" th:text="${squadra.nome}"
+								style="color: rgb(255, 255, 255); text-decoration: none;">Nome Squadra</a>
+						</strong>
+						<br>
+						<small style="color: #777;">Fondata nel <span th:text="${squadra.annoFondazione}">1900</span> a
+							<span th:text="${squadra.citta}">Città</span></small>
+					</li>
+				</ul>
+			</div>
+
+		</div> <!-- Fine riga Flexbox -->
+
+		<!-- SEZIONE CALENDARIO PARTITE (A tutta larghezza) -->
+		<div
+			style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+			<h2>⚽ Calendario Partite</h2>
+			<p th:if="${torneo.partite == null or torneo.partite.isEmpty()}">Il calendario non è ancora stato generato.
+			</p>
+
+			<table class="custom-table" th:if="${torneo.partite != null and !torneo.partite.isEmpty()}">
+				<thead>
+					<tr>
+						<th>Data e Ora</th>
+						<th>Luogo</th>
+						<th>Partita</th>
+						<th style="text-align: center;">Risultato</th>
+						<th style="text-align: center;">Commenti</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="partita : ${torneo.partite}">
+						<td th:text="${#temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm')}">10/06/2026 20:45</td>
+						<td th:text="${partita.luogo}">Stadio</td>
+						<td>
+							<strong th:text="${partita.squadraCasa.nome}">Casa</strong>
+							-
+							<strong th:text="${partita.squadraTrasferta.nome}">Trasferta</strong>
+						</td>
+						<td style="text-align: center;">
+							<span th:if="${partita.status.name() == 'PLAYED'}"
+								th:text="${partita.goalsHome} + ' - ' + ${partita.goalsAway}"
+								style="font-weight: bold; font-size: 1.1rem; color: #28a745;">2 - 1</span>
+
+							<span th:if="${partita.status.name() != 'PLAYED'}"
+								style="color: gray; font-style: italic;">Da giocare</span>
+						</td>
+						<td style="text-align: center;">
+							<!-- Pulsanti stile "btn" minuscoli per le azioni -->
+							<a class="btn" style="padding: 5px 10px; font-size: 0.9rem;"
+								sec:authorize="isAuthenticated()" th:href="@{/partita/{id}(id=${partita.id})}">Apri</a>
+
+							<a class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.9rem;"
+								sec:authorize="!isAuthenticated()" href="#"
+								onclick="alert('Per accedere a questa sezione devi essere loggato!'); return false;">Apri</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Pulsante Indietro -->
+		<div style="margin-top: 30px; text-align: center;">
+			<a class="btn btn-secondary" href="/tornei">&larr; Torna all'elenco dei tornei</a>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

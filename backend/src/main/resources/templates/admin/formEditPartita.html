@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inserisci Risultato</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+	<div class="container">
+    <h1>✏️ Modifica Partita</h1>
+    
+    <!-- Mostriamo l'incontro e la data -->
+    <h2>
+        <span th:text="${partita.squadraCasa.nome}">Casa</span> 
+        vs 
+        <span th:text="${partita.squadraTrasferta.nome}">Trasferta</span>
+    </h2>
+    <p>Data e Ora: <span th:text="${#temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm')}"></span></p>
+
+    <form th:action="@{/admin/partita/edit/{id}(id=${partita.id})}" th:object="${partita}" method="POST" class="form-admin">
+		<input type="hidden" th:field="*{id}" />
+        <div class="form-group">
+            <label>Gol <span th:text="${partita.squadraCasa.nome}"></span>:</label>
+			<input type="number" th:field="*{goalsHome}" class="form-control"/>
+			<span th:if="${#fields.hasErrors('goalsHome')}" th:errors="*{goalsHome}" class="text-danger"></span>
+        </div>
+        <br/>
+        
+        <div class="form-group">
+            <label>Gol <span th:text="${partita.squadraTrasferta.nome}"></span>:</label>
+			<input type="number" th:field="*{goalsAway}" class="form-control" />
+			<span th:if="${#fields.hasErrors('goalsAway')}" th:errors="*{goalsAway}" class="text-danger"></span>
+        </div>
+        <br/>
+        
+        <div class="form-group">
+            <label>Stato Partita:</label>
+            <select th:field="*{status}" class="form-control">
+                <option th:each="stato : ${statiPartita}" 
+                        th:value="${stato}" 
+                        th:text="${stato}"></option>
+            </select>
+        </div>
+        <br/>
+        <div class="form-actions">
+			<button type="submit" class="btn-primary">💾 Aggiorna Risultato</button>
+			<a th:href="@{/admin/torneo/edit/{id}(id=${partita.torneo.id})}" class="btn btn-secondary">&larr; Annulla e torna al Torneo</a>
+		</div>
+        
+    </form>
+     
+    <br/>
+	</div>
+   
+   
+</body>
+</html>

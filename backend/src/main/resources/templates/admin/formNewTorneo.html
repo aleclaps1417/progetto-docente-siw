@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inserisci Nuovo Torneo</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Aggiungi Un Nuovo Torneo</h1>
+		<form th:action="@{/admin/torneo}" method="POST" th:object="${torneo}" class="form-admin">
+			
+			<div class="form-group">
+				<label>Nome Torneo</label>
+				<input type="text" th:field="*{nome}" required class="form-control" />
+				<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="text-danger"></span>
+			</div>
+			<br>
+			<div class="form-group">
+				<label>Anno</label>
+				<input type="number" th:field="*{anno}" required class="form-control" />
+				<span th:if="${#fields.hasErrors('anno')}" th:errors="*{anno}" class="text-danger"></span>
+			</div>
+			<br>
+			<div class="form-group">
+				<label>Descrizione</label>
+				<br/>
+				
+				<textarea th:field="*{descrizione}" class="form-control"></textarea>
+				<span th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}" class="text-danger"></span>
+			</div>
+				<br/>
+			<div class="form-actions">
+				<button type="submit" class="btn-primary">Salva Torneo</button>
+				<a th:href="@{/admin/tornei}" class="btn btn-secondary">&larr; Annulla e torna alla Gestione Tornei</a>
+			</div>
+				
+		</form>
+		<br/>
+		
+	</div>
+</body>
+</html>
