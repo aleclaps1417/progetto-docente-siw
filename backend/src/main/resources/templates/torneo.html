@@ -16,6 +16,7 @@
 
 	<!-- NAVBAR STANDARD -->
 	<div class="navbar">
+		
 		<div>
 			<strong style="font-size: 1.2rem;">🏆 Gestione Tornei</strong>
 		</div>
@@ -37,13 +38,12 @@
 	</div>
 
 	<!-- CONTENITORE PRINCIPALE CENTRATO -->
-	<div class="container">
-
+	
 		<!-- Intestazione Torneo -->
 		<div style="text-align: center; margin-bottom: 40px;">
 			<h1 style="color: #e67e22;" th:text="'🏆 ' + ${torneo.nome}">Nome Torneo</h1>
-			<p style="font-size: 1.2rem;"><strong>Anno:</strong> <span th:text="${torneo.anno}">2000</span></p>
-			<p style="color: #555;"><em><span th:text="${torneo.descrizione}">Nessuna descrizione</span></em></p>
+			<p style="color: rgb(255, 255, 255); font-size: 1.2rem;"><strong>Anno:</strong> <span th:text="${torneo.anno}">2000</span></p>
+			<p style="color: rgb(255, 255, 255);"><em><span th:text="${torneo.descrizione}">Nessuna descrizione</span></em></p>
 		</div>
 
 		<!-- SEZIONE A DUE COLONNE CON FLEXBOX -->
@@ -97,6 +97,7 @@
 					</li>
 				</ul>
 			</div>
+			
 
 		</div> <!-- Fine riga Flexbox -->
 

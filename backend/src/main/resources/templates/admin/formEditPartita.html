@@ -15,9 +15,21 @@
         <span th:text="${partita.squadraTrasferta.nome}">Trasferta</span>
     </h2>
     <p>Data e Ora: <span th:text="${#temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm')}"></span></p>
+	
 
     <form th:action="@{/admin/partita/edit/{id}(id=${partita.id})}" th:object="${partita}" method="POST" class="form-admin">
 		<input type="hidden" th:field="*{id}" />
+		
+		<div class="form-group">
+					    <label>Arbitro:</label>
+					    <select th:field="*{arbitro}" class="form-control">
+					        <option value="">-- Nessuno --</option>
+					        <option th:each="arb : ${arbitri}"
+					                th:value="${arb.id}"
+					                th:text="${arb.nome + ' ' + arb.cognome + ' (' + arb.codiceArbitrale + ')'}"></option>
+					    </select>
+					</div>
+					<br/>
         <div class="form-group">
             <label>Gol <span th:text="${partita.squadraCasa.nome}"></span>:</label>
 			<input type="number" th:field="*{goalsHome}" class="form-control"/>
@@ -40,6 +52,11 @@
                         th:text="${stato}"></option>
             </select>
         </div>
+		<div class="form-group">
+		                <label>Luogo (Stadio):</label>
+		                <input type="text" th:field="*{luogo}" class="form-control"/>
+		            </div>
+		            <br/>
         <br/>
         <div class="form-actions">
 			<button type="submit" class="btn-primary">💾 Aggiorna Risultato</button>

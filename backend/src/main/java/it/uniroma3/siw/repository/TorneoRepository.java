@@ -15,4 +15,8 @@ public interface TorneoRepository extends CrudRepository<Torneo, Long>{
     
     @Query("SELECT t FROM Torneo t LEFT JOIN FETCH t.squadre WHERE t.id = :id")
     public Optional<Torneo> findByIdWithSquadre(@Param("id") Long id);
+
+    @EntityGraph(attributePaths = {"squadre"})
+    @Query("SELECT t FROM Torneo t WHERE t.id = :id")
+    Optional<Torneo> findByIdWithEntityGraph(@Param("id") Long id);
 }

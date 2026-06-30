@@ -19,7 +19,8 @@ public class Arbitro {
 	private String nome;
 	@Column(nullable=false)
 	private String cognome;
-	
+	@Column(unique=true,nullable=false)
+	private String codiceArbitrale;
 	//GETTER e SETTER
 	public Long getId() {return id;}
 	public void setId(Long id) {this.id = id;}
@@ -29,7 +30,8 @@ public class Arbitro {
 	public void setCognome(String cognome) {this.cognome = cognome;}
 	public List<Partita> getPartite() {return partite;}
 	public void setPartite(List<Partita> partite) {this.partite = partite;}
-	
+	public String getCodiceArbitrale() {return codiceArbitrale;}
+	public void setCodiceArbitrale(String codiceArbitrale) {this.codiceArbitrale = codiceArbitrale;}
 	
 
 	@Override

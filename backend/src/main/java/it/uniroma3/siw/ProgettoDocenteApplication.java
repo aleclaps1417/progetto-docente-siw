@@ -1,73 +1,119 @@
 package it.uniroma3.siw;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
 
-	import org.springframework.beans.factory.annotation.Autowired;
-	import org.springframework.boot.CommandLineRunner;
-	import org.springframework.boot.SpringApplication;
-	import org.springframework.boot.autoconfigure.SpringBootApplication;
-	import org.springframework.transaction.annotation.Transactional;
-
-	import it.uniroma3.siw.model.Torneo;
-	import it.uniroma3.siw.repository.TorneoRepository;
+import it.uniroma3.siw.model.Torneo;
+import it.uniroma3.siw.repository.TorneoRepository;
 
 	@SpringBootApplication
 	public class ProgettoDocenteApplication implements CommandLineRunner {
 
 	    @Autowired
 	    private TorneoRepository torneoRepository;
-
+	    
+	    @Value("${analisi.sperimentale.attiva:false}")
+	    private boolean analisAttiva;
+	    
 	    public static void main(String[] args) {
 	        SpringApplication.run(ProgettoDocenteApplication.class, args);
 	    }
-
 	    @Override
 	    @Transactional
 	    public void run(String... args) throws Exception {
-	        System.out.println("\n\n========================================================");
-	        System.out.println("🚀 INIZIO ANALISI SPERIMENTALE: STRATEGIE DI FETCH");
-	        System.out.println("========================================================\n");
+	    	
+	    		if (!analisAttiva) {
+	            return;
+	    		}
+	    	    System.out.println("\n========================================================");
+	    	    System.out.println("🚀 TEST 1: STRATEGIA LAZY (DEFAULT)");
+	    	    System.out.println("========================================================\n");
 
-	        Long idTorneo = 1000L;
+	    	    Long idTorneo = 1000L;
 
-	        // ---------------------------------------------------------
-	        // TEST 1: STRATEGIA STANDARD (LAZY) - Problema N+1
-	        // ---------------------------------------------------------
-	        System.out.println("▶ TEST 1: FIND BY ID STANDARD (LAZY)");
-	        long startTimeLazy = System.currentTimeMillis();
-	        
-	        // Prima query: carica il torneo
-	        Torneo torneoLazy = torneoRepository.findById(idTorneo).get();
-	        System.out.println("Nome Torneo: " + torneoLazy.getNome());
-	        
-	        // Qui scattano le N query extra per le squadre!
-	        int numeroSquadreLazy = torneoLazy.getSquadre().size(); 
-	        
-	        long endTimeLazy = System.currentTimeMillis();
-	        System.out.println("Squadre trovate: " + numeroSquadreLazy);
-	        System.out.println("⏱ Tempo Test LAZY: " + (endTimeLazy - startTimeLazy) + " ms\n");
+	    	    System.out.println("▶ FIND BY ID STANDARD (LAZY)");
+	    	    
+	    	    long t0 = System.currentTimeMillis();
+	    	    System.out.println("==> Inizio findById...");
+	    	    
+	    	    Torneo torneoLazy = torneoRepository.findById(idTorneo).get();
+	    	    
+	    	    long t1 = System.currentTimeMillis();
+	    	    System.out.println("==> findById finito in " + (t1 - t0) + " ms");
+	    	    System.out.println("Nome Torneo: " + torneoLazy.getNome());
+	    	    
+	    	    System.out.println("==> Inizio accesso a getSquadre()...");
+	    	    long t2 = System.currentTimeMillis();
+	    	    int numeroSquadre = torneoLazy.getSquadre().size();
+	    	    long t3 = System.currentTimeMillis();
+	    	    System.out.println("==> getSquadre() finito in " + (t3 - t2) + " ms");
+	    	    
+	    	    System.out.println("Squadre trovate: " + numeroSquadre);
+	    	    System.out.println("⏱ Tempo TOTALE LAZY: " + (t3 - t0) + " ms\n");
 
-
-	        // ---------------------------------------------------------
-	        // TEST 2: STRATEGIA OTTIMIZZATA (JOIN FETCH)
-	        // ---------------------------------------------------------
-	        System.out.println("▶ TEST 2: FIND BY ID CON JOIN FETCH (EAGER LOCALE)");
-	        long startTimeFetch = System.currentTimeMillis();
-	        
-	        // Unica query larga: carica torneo e squadre insieme
-	        Torneo torneoFetch = torneoRepository.findByIdWithSquadre(idTorneo).get();
-	        System.out.println("Nome Torneo: " + torneoFetch.getNome());
-	        
-	        // I dati sono già in RAM, P6Spy non stamperà nulla qui!
-	        int numeroSquadreFetch = torneoFetch.getSquadre().size();
-	        
-	        long endTimeFetch = System.currentTimeMillis();
-	        System.out.println("Squadre trovate: " + numeroSquadreFetch);
-	        System.out.println("⏱ Tempo Test JOIN FETCH: " + (endTimeFetch - startTimeFetch) + " ms\n");
-
-	        System.out.println("========================================================\n\n");
+	    	    System.out.println("========================================================\n");
+	    	
+//	    	
+//	    	    System.out.println("\n========================================================");
+//	    	    System.out.println("🚀 TEST 2: STRATEGIA JOIN FETCH");
+//	    	    System.out.println("========================================================\n");
+//
+//	    	    Long idTorneo = 1000L;
+//
+//	    	    System.out.println("▶ FIND BY ID CON JOIN FETCH");
+//	    	    
+//	    	    long t0 = System.currentTimeMillis();
+//	    	    System.out.println("==> Inizio findByIdWithSquadre...");
+//	    	    
+//	    	    Torneo torneoFetch = torneoRepository.findByIdWithSquadre(idTorneo).get();
+//	    	    
+//	    	    long t1 = System.currentTimeMillis();
+//	    	    System.out.println("==> findByIdWithSquadre finito in " + (t1 - t0) + " ms");
+//	    	    System.out.println("Nome Torneo: " + torneoFetch.getNome());
+//	    	    
+//	    	    System.out.println("==> Inizio accesso a getSquadre()...");
+//	    	    long t2 = System.currentTimeMillis();
+//	    	    int numeroSquadre = torneoFetch.getSquadre().size();
+//	    	    long t3 = System.currentTimeMillis();
+//	    	    System.out.println("==> getSquadre() finito in " + (t3 - t2) + " ms (dovrebbe essere 0, è già in memoria)");
+//	    	    
+//	    	    System.out.println("Squadre trovate: " + numeroSquadre);
+//	    	    System.out.println("⏱ Tempo TOTALE JOIN FETCH: " + (t3 - t0) + " ms\n");
+//
+//	    	    System.out.println("========================================================\n");
+//	    	
+//	    	
+//	    	System.out.println("\n========================================================");
+//	        System.out.println("🚀 TEST 3: STRATEGIA @ENTITYGRAPH");
+//	        System.out.println("========================================================\n");
+//
+//	        Long idTorneo = 1000L;
+//
+//	        System.out.println("▶ FIND BY ID CON @ENTITYGRAPH");
+//	        
+//	        long t0 = System.currentTimeMillis();
+//	        System.out.println("==> Inizio findByIdWithEntityGraph...");
+//	        
+//	        Torneo torneoGraph = torneoRepository.findByIdWithEntityGraph(idTorneo).get();
+//	        
+//	        long t1 = System.currentTimeMillis();
+//	        System.out.println("==> findByIdWithEntityGraph finito in " + (t1 - t0) + " ms");
+//	        System.out.println("Nome Torneo: " + torneoGraph.getNome());
+//	        
+//	        System.out.println("==> Inizio accesso a getSquadre()...");
+//	        long t2 = System.currentTimeMillis();
+//	        int numeroSquadre = torneoGraph.getSquadre().size();
+//	        long t3 = System.currentTimeMillis();
+//	        System.out.println("==> getSquadre() finito in " + (t3 - t2) + " ms (dovrebbe essere 0, è già in memoria)");
+//	        
+//	        System.out.println("Squadre trovate: " + numeroSquadre);
+//	        System.out.println("⏱ Tempo TOTALE @ENTITYGRAPH: " + (t3 - t0) + " ms\n");
+//
+//	        System.out.println("========================================================\n");
 	    }
-	
 	    
 }

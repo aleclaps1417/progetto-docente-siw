@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.uniroma3.siw.model.Giocatore;
 import it.uniroma3.siw.model.Partita;
 import it.uniroma3.siw.model.Squadra;
 import it.uniroma3.siw.model.Torneo;
+import it.uniroma3.siw.repository.ArbitroRepository;
 import it.uniroma3.siw.service.GiocatoreService;
 import it.uniroma3.siw.service.PartitaService;
 import it.uniroma3.siw.service.SquadraService;
@@ -53,6 +53,8 @@ public class AdminController {
 	
 	@Autowired
 	private PartitaValidator partitaValidator;
+	@Autowired
+	private ArbitroRepository arbitroRepository;
 	
 	@GetMapping("/dashboard")
 	public String getAdminDashboard() {
@@ -315,7 +317,7 @@ public class AdminController {
     		
     		//Passimao i possibili stati della partita
     		model.addAttribute("statiPartita",it.uniroma3.siw.model.PartitaStatus.values());
-    		
+    		model.addAttribute("arbitri",arbitroRepository.findAll());
     		return "admin/formNewPartita";
     }
     
@@ -331,6 +333,7 @@ public class AdminController {
     			model.addAttribute("torneo",torneo);
     			model.addAttribute("squadreTorneo",torneo.getSquadre());
     			model.addAttribute("statiPartita",it.uniroma3.siw.model.PartitaStatus.values());
+    			model.addAttribute("arbitri", arbitroRepository.findAll()); 
     			return "admin/formNewPartita";
     		}
     		
@@ -367,6 +370,7 @@ public class AdminController {
     	Partita partita=partitaService.findById(id);
     	model.addAttribute("partita",partita);
     	model.addAttribute("statiPartita",it.uniroma3.siw.model.PartitaStatus.values());
+    	model.addAttribute("arbitri", arbitroRepository.findAll());
     	return "admin/formEditPartita";
     }
     
@@ -383,6 +387,7 @@ public class AdminController {
         	partitaForm.setDataEOra(partitaOriginale.getDataEOra());
         	partitaForm.setTorneo(partitaOriginale.getTorneo());
         	model.addAttribute("statiPartita",it.uniroma3.siw.model.PartitaStatus.values());
+        	model.addAttribute("arbitri", arbitroRepository.findAll()); 
         	return "admin/formEditPartita";
         }
         //Se va tutto bene, salviamo
@@ -390,6 +395,8 @@ public class AdminController {
         partitaDaSalvare.setGoalsHome(partitaForm.getGoalsHome());
         partitaDaSalvare.setGoalsAway(partitaForm.getGoalsAway());
         partitaDaSalvare.setStatus(partitaForm.getStatus());
+        partitaDaSalvare.setLuogo(partitaForm.getLuogo());
+        partitaDaSalvare.setArbitro(partitaForm.getArbitro()); 
         
         partitaService.save(partitaDaSalvare);
         redirectAttributes.addFlashAttribute("successMessage", "Risultato aggiornato con successo!");

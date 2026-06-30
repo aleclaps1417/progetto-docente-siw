@@ -8,13 +8,24 @@
 <body>
     <div class="container">
         <h1>Aggiungi Partita al Torneo: <span th:text="${torneo.nome}">Nome</span></h1>
-        
+		
+		
         <form th:action="@{/admin/torneo/{t_id}/partita/new(t_id=${torneo.id})}" method="POST" th:object="${partita}" class="form-admin">
             
             <div class="form-group">
                 <label>Data e Ora:</label>
                 <input type="datetime-local" th:field="*{dataEOra}" required class="form-control"/>
             </div>
+			<div class="form-group">
+						    <label>Arbitro:</label>
+						    <select th:field="*{arbitro}" class="form-control">
+						        <option value="">-- Nessuno --</option>
+						        <option th:each="arb : ${arbitri}"
+						                th:value="${arb.id}"
+						                th:text="${arb.nome + ' ' + arb.cognome + ' (' + arb.codiceArbitrale + ')'}"></option>
+						    </select>
+						</div>
+						<br/>
             <br/>
 
             <div class="form-group">

@@ -53,6 +53,17 @@
 				📍 <span th:text="${partita.luogo}">Stadio</span> |
 				🚦 <span th:text="${partita.status}">Stato</span>
 			</p>
+			<!-- Riga dedicata all'arbitro -->
+			<p style="margin-top: 10px; margin-bottom: 0;">
+			    👨‍⚖️ Arbitro: 
+			    <span th:if="${partita.arbitro != null}" 
+			          th:text="${partita.arbitro.nome + ' ' + partita.arbitro.cognome + ' (' + partita.arbitro.codiceArbitrale + ')'}">
+			        Nome Cognome (AIA-000)
+			    </span>
+			    <span th:if="${partita.arbitro == null}" style="font-style: italic; color: #aaa;">
+			        Non assegnato
+			    </span>
+			</p>
 		</div>
 
 

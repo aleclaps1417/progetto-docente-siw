@@ -17,7 +17,7 @@ public class PartitaValidator implements Validator{
 	@Override
 	public boolean supports(Class<?> clazz) {
 		//Dico a Spring che questo validatore seve solo per la classe Squadra
-		return Squadra.class.equals(clazz);
+		return Partita.class.equals(clazz);
 	}
 	@Override
 	public void validate(Object target,Errors errors) {
