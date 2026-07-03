@@ -1,13 +1,14 @@
 package it.uniroma3.siw.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.model.Commento;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.model.exceptions.RisorsaNonTrovataException;
 import it.uniroma3.siw.repository.CommentoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentoService {
@@ -24,22 +25,35 @@ public class CommentoService {
 		return commentoRepository.save(commento);
 	}
 	
+	@Transactional(readOnly = true)
+	public Commento findByIdEVerificaAutore(Long id, User utenteLoggato) {
+	    Commento commento = this.findById(id);
+	    
+	    if (commento == null) {
+	        throw new IllegalArgumentException("Commento non trovato");
+	    }
+	    
+	    if (!commento.getAutore().getId().equals(utenteLoggato.getId())) {
+	        throw new AccessDeniedException("Non puoi modificare commenti di altri utenti");
+	    }
+	    
+	    return commento;
+	}
+
 	@Transactional
-	public Commento aggiornaCommento(Long commentoId,String nuovoTesto,User utenteLoggato) {
-		Commento commento=this.findById(commentoId);
-		
-		if(commento==null) {
-			throw new IllegalArgumentException("Commento non trovato");
-		}
-		// CONTROLLO DI SICUREZZA: L'utente che fa la richiesta è davvero l'autore?
-        // Confrontiamo gli ID degli utenti 
-		if(commento.getAutore().getId().equals(utenteLoggato.getId())){
-			commento.setTesto(nuovoTesto);
-			return commentoRepository.save(commento);
-		}
-		else {
-			throw new RuntimeException("Operazione negata:puoi modificare solo i tuoi commenti");
-		}
+	public Commento aggiornaCommento(Long commentoId, String nuovoTesto, User utenteLoggato) {
+	    Commento commento = this.findById(commentoId);
+
+	    if (commento == null) {
+	        throw new IllegalArgumentException("Commento non trovato");
+	    }
+	    
+	    if (!commento.getAutore().getId().equals(utenteLoggato.getId())) {
+	        throw new AccessDeniedException("Non puoi modificare commenti di altri utenti");
+	    }
+	    
+	    commento.setTesto(nuovoTesto);
+	    return commentoRepository.save(commento);
 	}
 	
 

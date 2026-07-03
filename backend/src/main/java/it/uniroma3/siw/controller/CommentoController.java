@@ -25,18 +25,19 @@ public class CommentoController {
 	
 	@Autowired
 	private CredentialsService credentialsService;
-	// 1. Mostra la pagina con il form pre-compilato
-	@GetMapping("/commento/modifica/{id}")
-    public String getModificaCommento(@PathVariable("id") Long id, Model model) {
-        Commento commento = commentoService.findById(id);
-
-        // Recuperiamo l'utente loggato
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-        Credentials credentials = credentialsService.findByUsername(username);
 	
-        model.addAttribute("commento", commento);
-        return "modificaCommento";
+	@GetMapping("/commento/modifica/{id}")
+	public String getModificaCommento(@PathVariable("id") Long id, Model model) {
+	    // Recuperiamo l'utente loggato PRIMA
+	    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    String username = ((UserDetails) principal).getUsername();
+	    Credentials credentials = credentialsService.findByUsername(username);
+	    
+	    // Recuperiamo il commento SOLO se l'utente è l'autore
+	    Commento commento = commentoService.findByIdEVerificaAutore(id, credentials.getUser());
+	    
+	    model.addAttribute("commento", commento);
+	    return "modificaCommento";
 	}
 	
 	// 2. Riceve i dati dal form e aggiorna il commento
