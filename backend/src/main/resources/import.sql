@@ -69,10 +69,8 @@ INSERT INTO arbitro (id, nome, cognome, codice_arbitrale) VALUES (5003, 'Gianluc
 -- 6. PARTITE (ID da 4000 in poi)
 -- ==========================================
 
--- Partita 1: Roma Sparita vs Milano Centrale (Già giocata, vince la Roma 2-1)
 INSERT INTO partita (id, dataeora, goals_home, goals_away, status, squadra_casa_id, squadra_trasferta_id, torneo_id,arbitro_id)VALUES (4001, '2026-06-10 20:45:00', 2, 1, 'PLAYED', 2000, 2001, 1000,5001);
 
--- Partita 2: Ritorno Milano Centrale vs Roma Sparita (Da giocare)
 INSERT INTO partita (id, dataeora, goals_home, goals_away, status, squadra_casa_id, squadra_trasferta_id, torneo_id,arbitro_id)VALUES (4002, '2026-06-17 20:45:00', NULL, NULL, 'SCHEDULED', 2001, 2000, 1000,5002);
 
 
@@ -83,5 +81,3 @@ INSERT INTO partita (id, dataeora, goals_home, goals_away, status, squadra_casa_
 
 INSERT INTO users(id, name, surname, email) VALUES(nextval('users_seq'), 'Alessandro', 'Claps', 'admin@gestionetornei.it');
 INSERT INTO credentials(id, username, password, role, user_id)VALUES(nextval('credentials_seq'),'alessandro','$2a$10$3HK4W5wK9ZUl4mxV/ikvxOQGv1rlpIzbbrt3.pcZzNHnuilDweseO','ADMIN',currval('users_seq'));
---Settiamo di default un amministratore 
---INSERT INTO credentials(id,username,password,role)values(nextval('credentials_seq'),'alessandro','$2a$10$3HK4W5wK9ZUl4mxV/ikvxOQGv1rlpIzbbrt3.pcZzNHnuilDweseO','ADMIN');
