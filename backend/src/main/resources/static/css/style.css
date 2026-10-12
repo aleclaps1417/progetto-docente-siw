@@ -2,19 +2,19 @@
    REGOLE GLOBALI (Reset e Tipografia)
    ========================================= */
 body {
-    font-family: Arial, sans-serif; /* Un font più pulito */
-    margin: 0; /* Rimuoviamo i margini di default del browser */
+    font-family: Arial, sans-serif; 
+    margin: 0; 
     padding: 0;
     color: #333;
 	background-image: url('../images/olimpico2.jpeg'); 
 	    
     
    
-    background-position: center ; /* Centra l'immagine */
-    background-repeat: no-repeat; /* Evita che l'immagine si ripeta a mosaico */
+    background-position: center ; 
+    background-repeat: no-repeat; 
 	background-size: cover;
 	
-    /* Fa sì che l'immagine resti fissa mentre scorri la pagina verso il basso */
+
     background-attachment: fixed;
 }
 
@@ -22,25 +22,25 @@ body {
    NAVBAR (Flexbox)
    ========================================= */
 .navbar {
-    display: flex; /* Attiviamo la magia di Flexbox! */
-    justify-content: space-between; /* Spinge gli elementi ai due lati opposti */
-    align-items: center; /* Allinea verticalmente gli elementi al centro */
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
     background-color: #ffffff;
     padding: 15px 30px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Una leggera ombra per dare profondità */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
     margin-bottom: 30px;
 }
 
 /* Stile per i link dentro la navbar */
 .navbar a {
-    text-decoration: none; /* Togliamo la sottolineatura */
+    text-decoration: none; 
     color: #007bff;
     margin: 0 10px;
     font-weight: bold;
 }
 
 .navbar a:hover {
-    color: #0056b3; /* Colore più scuro quando ci passi sopra col mouse */
+    color: #0056b3; 
 }
 
 /* Stile per il saluto dell'utente */
@@ -68,17 +68,17 @@ body {
    CONTENITORE PRINCIPALE
    ========================================= */
 .container {
-    max-width: 800px; /* Evita che il testo diventi larghissimo su schermi grandi */
-    margin: 0 auto; /* Centra il contenitore nella pagina */
+    max-width: 800px; 
+    margin: 0 auto; 
     padding: 20px;
     background-color: white;
-    border-radius: 8px; /* Angoli arrotondati */
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 /* Stile per la lista di link (es. Tornei) */
 .link-list {
-    list-style-type: none; /* Toglie i pallini neri */
+    list-style-type: none; 
     padding: 0;
 }
 
@@ -89,7 +89,7 @@ body {
 .link-list a {
     display: inline-block;
     padding: 10px 15px;
-    background-color: #28a745; /* Verde per azioni positive */
+    background-color: #28a745; 
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -126,19 +126,19 @@ body {
    PAGINA TORNEI (Griglia a Card con Flexbox)
    ========================================= */
 .card-container {
-    display: flex;         /* Attiva Flexbox */
-    flex-wrap: wrap;       /* Permette alle card di andare a capo se non c'è spazio[cite: 2] */
-    gap: 20px;             /* Crea spazio vuoto tra una card e l'altra */
+    display: flex;         
+    flex-wrap: wrap;      
+    gap: 20px;            
     margin-top: 20px;
 }
 
 .torneo-card {
     background-color: #f8f9fa;
     border: 1px solid #ddd;
-    border-radius: 8px;    /* Angoli arrotondati[cite: 2] */
-    padding: 20px;         /* Spazio interno al bordo[cite: 2] */
+    border-radius: 8px;   
+    padding: 20px;         
     
-    /* Flex-grow, shrink e basis: occupa 1/3 dello spazio meno il gap[cite: 2] */
+    /* Flex-grow, shrink e basis: occupa 1/3 dello spazio meno il gap */
     flex: 1 1 calc(33.333% - 20px); 
     box-sizing: border-box; 
     
@@ -147,19 +147,19 @@ body {
 }
 
 .torneo-card:hover {
-    transform: translateY(-5px); /* La card si "alza" quando passi il mouse */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15); /* Aumenta l'ombra */
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15); 
 }
 
 .torneo-card h2 {
     margin-top: 0;
-    color: #e67e22; /* Un bell'arancione/oro per il titolo del torneo */
+    color: #e67e22; 
 }
 
 /* =========================================
    RESPONSIVE DESIGN (Media Queries)
    ========================================= */
-/* Se lo schermo è più piccolo di 768px (es. smartphone), metti 1 card per riga[cite: 2] */
+/* Se lo schermo è più piccolo di 768px (es. smartphone), metti 1 card per riga*/
 @media (max-width: 768px) {
     .torneo-card {
         flex: 1 1 100%; 
@@ -170,14 +170,14 @@ body {
    LAYOUT A DUE COLONNE (Flexbox)
    ========================================= */
 .row {
-    display: flex;       /* Attiviamo Flexbox */
-    flex-wrap: wrap;     /* Permette di andare a capo sui cellulari */
-    gap: 30px;           /* Spazio tra le due colonne */
+    display: flex;       
+    flex-wrap: wrap;     
+    gap: 30px;           
     margin-bottom: 40px;
 }
 
 .col {
-    flex: 1 1 calc(50% - 15px); /* Ogni colonna prende metà spazio[cite: 2] */
+    flex: 1 1 calc(50% - 15px); 
     background-color: #f8f9fa;
     padding: 20px;
     border-radius: 8px;
@@ -193,7 +193,7 @@ body {
     margin-top: 15px;
     background-color: white;
     border-radius: 8px;
-    overflow: hidden; /* Taglia gli spigoli della tabella per farli tondi */
+    overflow: hidden; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
@@ -209,12 +209,12 @@ body {
 }
 
 .custom-table tbody tr:hover {
-    background-color: #f1f5f9; /* Effetto riga illuminata al passaggio del mouse */
+    background-color: #f1f5f9; 
 }
 
 /* Colori specifici per la classifica */
 .table-classifica thead tr {
-    background-color: #28a745; /* Verde per la classifica */
+    background-color: #28a745; 
 }
 
 
@@ -263,16 +263,16 @@ body {
    LISTA SEMPLICE (Dettaglio Squadra)
    ========================================= */
 .lista-semplice {
-    list-style-type: square; /* Usiamo dei quadratini invece dei soliti pallini neri */
+    list-style-type: square; 
     padding-left: 20px;
 }
 
 .lista-semplice li {
     padding: 10px 0;
-    border-bottom: 1px solid #eee; /* Una riga grigia sottilissima per separare i giocatori */
+    border-bottom: 1px solid #eee; 
 }
 
-/* Rimuove la riga all'ultimo giocatore della lista */
+
 .lista-semplice li:last-child {
     border-bottom: none; 
 }
@@ -282,15 +282,15 @@ body {
    FORM E INPUT
    ========================================= */
 .form-control {
-    width: 100%;             /* Occupa tutta la larghezza disponibile */
-    padding: 15px;           /* Spazio interno per non far toccare il testo ai bordi */
+    width: 100%;             
+    padding: 15px;           
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-family: inherit;    /* Usa lo stesso font del sito */
+    font-family: inherit;   
     font-size: 1rem;
-    box-sizing: border-box;  /* Fa sì che il padding non "sfondi" il 100% della larghezza */
+    box-sizing: border-box;  
     margin-bottom: 10px;
-    resize: vertical;        /* Permette all'utente di allungare la casella solo verso il basso */
+    resize: vertical;        
 }
 
 /* Effetto quando clicchi dentro la casella di testo */
@@ -310,8 +310,8 @@ body {
    SFONDO ALTERNATIVO (Per pagine specifiche)
    ========================================= */
 .sfondo-semplice {
-    background-image: none !important; /* Disattiva l'immagine di sfondo */
-    background-color: #e9ecef;         /* Imposta un grigio chiaro e riposante */
+    background-image: none !important; 
+    background-color: #e9ecef;         
 }
 
 
@@ -320,7 +320,7 @@ body {
    DETTAGLIO PARTITA E COMMENTI
    ========================================= */
 .scoreboard {
-    background-color: #007bff; /* Sfondo blu per far risaltare il risultato */
+    background-color: #007bff; 
     color: white;
     text-align: center;
     padding: 20px;
@@ -337,7 +337,7 @@ body {
 .comment-box {
     background-color: white;
     border: 1px solid #ddd;
-    border-left: 5px solid #28a745; /* Riga verde laterale per abbellire il commento */
+    border-left: 5px solid #28a745;
     border-radius: 5px;
     padding: 15px;
     margin-bottom: 15px;
