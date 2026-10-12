@@ -1,58 +1,49 @@
-# Gestione Tornei - Progetto Docente SIW
+# Amateur Football Tournament Management System
 
-Sistema informativo per la gestione di tornei di calcio amatoriale, sviluppato come progetto docente per il corso di **Sistemi Informativi su Web (SIW)** - Università degli Studi Roma Tre, A.A. 2025/2026.
+A full-stack web application developed for the Web Information Systems (SIW) course at Università degli Studi Roma Tre (A.Y. 2025/2026). 
 
-**Studente**: Alessandro Claps  
+## Description
+This system manages amateur football tournaments, handling participating teams, players, match schedules, results, and current standings. It implements Role-Based Access Control (RBAC) with distinct privileges for public visitors, registered users, and system administrators. 
 
-## Descrizione
-
-L'applicazione consente di gestire uno o più tornei di calcio amatoriale, registrandone le squadre partecipanti, i giocatori, il calendario delle partite, i risultati e la classifica. Il sistema distingue tra utenti generici, utenti registrati (che possono commentare le partite) e amministratori (che gestiscono i tornei e tutte le entità associate).
-
-## Tecnologie
+## Tech Stack
 
 ### Backend
-- **Spring Boot**
-- **Spring Security** 
-- **Spring Data JPA / Hibernate**
-- **PostgreSQL**
-- **Thymeleaf** per il frontend principale
+* **Java / Spring Boot:** Core backend framework.
+* **Spring Security:** Authentication and authorization.
+* **Spring Data JPA / Hibernate:** ORM and database interactions.
+* **PostgreSQL:** Relational database management.
+* **Thymeleaf:** Server-side rendering for the main frontend application.
 
-### Frontend React (lista tornei, calendario partite, gestione giocatori)
-- **React ** + **TypeScript**
-- **Vite** come build tool
-- **React Router** per il routing client-side
-- **Material UI** per i componenti grafici
-- **Axios** per le chiamate HTTP
+### Frontend (React Application)
+* **React + TypeScript:** Client-side architecture for tournament listings, match schedules, and player management.
+* **Vite:** Build tool and development server.
+* **React Router:** Client-side routing.
+* **Material UI (MUI):** UI component library.
+* **Axios:** HTTP client for REST API communication.
 
+## Core Entities
+* **User:** Personal details (name, surname, email) and credentials.
+* **Tournament:** Name, year, description.
+* **Team:** Name, city, founding year.
+* **Match:** Date/time, location, home/away goals, status (SCHEDULED / PLAYED / CANCELLED).
+* **Player:** Name, surname, role, height, date of birth.
+* **Referee:** Name, surname, unique referee ID.
+* **Role/Credentials:** Username, password, role level (DEFAULT_ROLE / ADMIN_ROLE).
+* **Comment:** Text, creation timestamp, author (User), associated match.
 
-## Entità principali
-- **User**:dati anagrafici dell'utente (nome, cognome, email)
-- **Torneo**:nome, anno, descrizione
-- **Squadra**:nome, città, anno di fondazione
-- **Partita**:data e ora, luogo, gol casa, gol trasferta, status (SCHEDULED / PLAYED / CANCELLED)
-- **Giocatore**:nome, cognome, ruolo, altezza, data di nascita
-- **Arbitro**:nome, cognome, codice arbitrale (unique)
-- **Credentials**: username, password , ruolo (DEFAULT_ROLE / ADMIN_ROLE)
-- **Commento**: testo, data creazione, autore (User), partita associata
+## Implemented Use Cases
 
-## Casi d'uso implementati
+### Public Users
+* Browse the list of active and past tournaments.
+* View tournament details, participating teams, and current standings.
+* Access match schedules and results.
+* View specific team details and player rosters.
 
-### Utenti pubblici
-1. **UC1** -Visualizzazione dell'elenco dei tornei
-2. **UC2** -Visualizzazione del dettaglio di un torneo
-3. **UC3** - Visualizzazione delle squadre partecipanti
-4. **UC4** -Visualizzazione del calendario delle partite
-5. **UC5** - Visualizzazione del dettaglio di una squadra (con giocatori)
-6. **UC6** - Visualizzazione della classifica del torneo
+### Registered Users
+* Read match commentary.
+* Publish, edit, and manage their own comments on specific matches.
 
-### Utenti registrati
-7. **UC7** - Visualizzazione commenti
-8. **UC8** - Inserimento e modifica di un proprio commento ad una partita (un utente può modificare solo i propri commenti)
-
-### Amministratore
-9. **UC9** - Creazione e modifica di un torneo
-10. **UC10** - Inserimento e modifica di una squadra
-11. **UC11** - Inserimento e modifica dei giocatori
-12. **UC12** - Registrazione di una partita
-13. **UC13** - Inserimento del risultato di una partita
-14. **UC14** - Eliminazione di squadre e partite
+### Administrators
+* **Tournaments:** Create and update tournament details.
+* **Teams & Players:** Manage team registrations, rosters, and player profiles (Insert/Update/Delete).
+* **Matches:** Schedule matches, assign referees, and record final scores.
